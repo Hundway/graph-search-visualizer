@@ -7,7 +7,7 @@
   const forwardIcon = '/src/assets/icons/forward.svg'
   const backwardIcon = '/src/assets/icons/backward.svg'
   
-  const toggleIconUrl = computed(() => isPanelOpen.value ? backwardIcon : forwardIcon)
+  const toggleIconUrl = computed(() => isPanelOpen.value ? forwardIcon : backwardIcon)
   
   const toggleConfiguration = () => {
     isPanelOpen.value = !isPanelOpen.value

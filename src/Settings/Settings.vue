@@ -2,7 +2,7 @@
   import { ref, computed } from 'vue'
   import Panel from './Panel.vue'
   
-  const isPanelOpen = ref(false)
+  const isPanelOpen = ref(true)
   
   const forwardIcon = '/src/assets/icons/forward.svg'
   const backwardIcon = '/src/assets/icons/backward.svg'

@@ -38,33 +38,33 @@
 </template>
 
 <style scoped>
-#settings-panel {
-  display: flex;
-  flex-direction: row;
-}
+  #settings-panel {
+    display: flex;
+    flex-direction: row;
+  }
 
-section {
-  width: 100%;
-  height: 100vh;
-  background-color: var(--bg);
-  padding: 20px;
-  overflow: auto;
-  font-size: 0.8rem;
-}
+  section {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--bg);
+    padding: 20px;
+    overflow: auto;
+    font-size: 0.8rem;
+  }
 
-h2 {
-  color: var(--text);
-}
+  h2 {
+    color: var(--text);
+  }
 
-#panel-resizer {
-  width: 4px;
-  border: none;
-  cursor: col-resize;
-  background-color: var(--bg-light);
-}
+  #panel-resizer {
+    width: 4px;
+    border: none;
+    cursor: col-resize;
+    background-color: var(--bg-light);
+  }
 
-#panel-resizer:hover {
-  background-color: var(--bg-light);
-  transition: all 0.3s ease-in-out;
-}
+  #panel-resizer:hover {
+    background-color: var(--bg-light);
+    transition: all 0.3s ease-in-out;
+  }
 </style>

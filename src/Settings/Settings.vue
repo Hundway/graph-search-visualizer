@@ -8,7 +8,6 @@
   const backwardIcon = '/src/assets/icons/backward.svg'
   
   const toggleImageUrl = computed(() => isPanelOpen.value ? backwardIcon : forwardIcon)
-  const togglePanel = computed(() => isPanelOpen.value ? 'display: none' : 'display: flex')
   
   const toggleConfiguration = () => {
     isPanelOpen.value = !isPanelOpen.value
@@ -20,7 +19,7 @@
     <button id="settings-toggle-button" @pointerdown="toggleConfiguration">
       <img :src="toggleImageUrl"/>
     </button>
-    <Panel :style="togglePanel"/>
+    <Panel v-show="isPanelOpen"/>
   </aside>
 </template>
 

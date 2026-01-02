@@ -1,35 +1,26 @@
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from 'vue'
-import Panel from './Panel.vue'
-
-const isConfigurationOpen = ref(false)
-
-const toggleConfiguration = () => {
-  const panel = document.getElementById('settings-panel');
-  const button = document.getElementById('settings-toggle-button');
-  const icon = button?.querySelector('img');
-
-  if (!panel || !button || !icon) return
-
-  isConfigurationOpen.value = !isConfigurationOpen.value
-
-  if (isConfigurationOpen.value) {
-    panel.style.display = 'none'
-    icon.src = '/src/assets/icons/backward.svg'
+  import { ref, computed } from 'vue'
+  import Panel from './Panel.vue'
+  
+  const isPanelOpen = ref(false)
+  
+  const forwardIcon = '/src/assets/icons/forward.svg'
+  const backwardIcon = '/src/assets/icons/backward.svg'
+  
+  const toggleImageUrl = computed(() => isPanelOpen.value ? backwardIcon : forwardIcon)
+  const togglePanel = computed(() => isPanelOpen.value ? 'display: none' : 'display: flex')
+  
+  const toggleConfiguration = () => {
+    isPanelOpen.value = !isPanelOpen.value
   }
-  else {
-    panel.style.display = 'flex'
-    icon.src = '/src/assets/icons/forward.svg'
-  }
-}
 </script>
 
 <template>
   <aside id="settings-area">
     <button id="settings-toggle-button" @pointerdown="toggleConfiguration">
-      <img src="/src/assets/icons/forward.svg" />
+      <img :src="toggleImageUrl"/>
     </button>
-    <Panel/>
+    <Panel :style="togglePanel"/>
   </aside>
 </template>
 

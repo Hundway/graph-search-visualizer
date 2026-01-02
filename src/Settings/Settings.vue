@@ -7,7 +7,7 @@
   const forwardIcon = '/src/assets/icons/forward.svg'
   const backwardIcon = '/src/assets/icons/backward.svg'
   
-  const toggleImageUrl = computed(() => isPanelOpen.value ? backwardIcon : forwardIcon)
+  const toggleIconUrl = computed(() => isPanelOpen.value ? backwardIcon : forwardIcon)
   
   const toggleConfiguration = () => {
     isPanelOpen.value = !isPanelOpen.value
@@ -17,7 +17,7 @@
 <template>
   <aside id="settings-area">
     <button id="settings-toggle-button" @pointerdown="toggleConfiguration">
-      <img :src="toggleImageUrl"/>
+      <img :src="toggleIconUrl"/>
     </button>
     <Panel v-show="isPanelOpen"/>
   </aside>

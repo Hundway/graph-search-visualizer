@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { ref, onBeforeUnmount } from 'vue'
   import Options from './Options.vue'
-  import Buttons from './Buttons.vue'
+  
+  import ButtonContainer from '../ButtonContainer.vue'
+  import IconButton from '../IconButton.vue'
 
   const panelWidth = ref(400)
   let resizing = false
@@ -32,7 +34,10 @@
     <section>
       <h2>Configuration Panel</h2>
       <Options />
-      <Buttons />
+      <ButtonContainer>
+        <IconButton id="bt-start" iconUrl="/src/assets/icons/start.svg" title="Start"/>
+        <IconButton id="bt-reset" iconUrl="/src/assets/icons/reset.svg" title="Reset"/>
+      </ButtonContainer>
     </section>
   </div>
 </template>

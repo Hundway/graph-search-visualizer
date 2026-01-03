@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import LegendItem from 'LegendItem.vue';
+  import LegendItem from './LegendItem.vue';
 </script>
 
 <template>

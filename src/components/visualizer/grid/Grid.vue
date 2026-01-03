@@ -1,9 +1,6 @@
 <script setup lang="ts">
   import { ref, computed, onMounted, onUnmounted } from 'vue'
-
-  import Legend from 'Legend.vue'
-  import IconButton from '@/components/IconButton.vue'
-  import ButtonContainer from '@/components/ButtonContainer.vue'
+import GridFooter from './GridFooter.vue'
 
 
   type CellState = 'empty' | 'start' | 'end' | 'wall'
@@ -157,13 +154,7 @@
       </div>
     </section>
 
-    <footer id="grid-footer">
-      <Legend />
-      <ButtonContainer id="grid-controls">
-        <IconButton id="bt-generate" iconUrl="/src/assets/icons/generate.svg" title="Generate" @click="generateMaze"/>
-        <IconButton id="bt-clear" iconUrl="/src/assets/icons/clear.svg" title="Clear" @click="clearGrid"/>
-      </ButtonContainer>
-    </footer>
+    <GridFooter  @clear="clearGrid" @generate="generateMaze"/>
   </main>
 </template>
 
@@ -187,14 +178,8 @@
     transition: background-color 120ms ease, transform 120ms ease;
   }
 
-
   @keyframes pop {
     0%   { transform: scale(0.85); }
     100% { transform: scale(1); }
-  }
-
-  #grid-footer {
-    display: flex;
-    justify-content: space-between
   }
 </style>

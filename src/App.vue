@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Settings from './Components/Settings/Settings.vue'
-  import Visualizer from './Components/Visualizer/Visualizer.vue'
+  import Settings from './components/settings/Settings.vue'
+  import Visualizer from './components/visualizer/Visualizer.vue'
 </script>
 
 

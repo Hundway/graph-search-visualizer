@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-  import Legend from './Legend.vue'
+  import Legend from 'Legend.vue'
   import IconButton from '@/components/IconButton.vue'
   import ButtonContainer from '@/components/ButtonContainer.vue'
 

@@ -1,13 +1,12 @@
 <script setup lang="ts">
   import { ref, computed, onMounted, onUnmounted } from 'vue'
-import GridFooter from './GridFooter.vue'
-
+  import GridFooter from './GridFooter.vue'
+  import { Maze } from './useMaze.ts'
 
   type CellState = 'empty' | 'start' | 'end' | 'wall'
 
   const ROWS = 20
   const COLS = 30
-
   const grid = ref<CellState[][]>(Array.from({ length: ROWS }, () => Array.from({ length: COLS }, () => 'empty')))
 
   const mouseDown = ref(false)
@@ -23,20 +22,31 @@ import GridFooter from './GridFooter.vue'
   function clearGrid() {
     for (let i = 0; i < ROWS; i++)
       for (let j = 0; j < COLS; j++)
-        grid.value[i][j] = 'empty'
+        grid.value[i]![j] = 'empty'
   }
 
-  function setCell(i: number, j: number, state: CellState) {
-    grid.value[i][j] = state
+  function applyMaze() {
+    clearGrid()
+    renderMaze(Maze.generate(ROWS, COLS))
+  }
+
+  function renderMaze(maze: number[][]) {
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        if (maze[r]![c] === 1) {
+          grid.value[r]![c] = 'wall'
+        }
+      }
+    }
   }
 
   function toggleCell(i: number, j: number) {
-    const current = grid.value[i][j]
+    const current = grid.value[i]![j]
     let next: CellState = 'empty'
     if (current === 'empty') {
       next = !startIsSet.value ? 'start': !endIsSet.value ? 'end' : 'wall'
     }
-    grid.value[i][j] = next
+    grid.value[i]![j] = next
   }
 
   function onEnter(i: number, j: number) {
@@ -45,88 +55,6 @@ import GridFooter from './GridFooter.vue'
 
   function stopMouse() {
     mouseDown.value = false
-  }
-
-    function getGridShape() {
-    const grid = document.getElementById('grid')
-    if (!grid) throw new Error('Grid not found')
-    const rows = grid.children.length
-    const cols = (grid.children[0] as HTMLElement).children.length
-    return { rows, cols }
-  }
-
-  function createGrid(rows: number, cols: number) {
-    return Array.from({length: rows}, () => Array.from({length: cols}, () => 0))
-  }
-
-  function randInt(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1) + min)
-  }
-
-  function randCell() {
-    const { rows, cols } = getGridShape()
-    const r = randInt(0, rows - 1)
-    const c = randInt(0, cols - 1)
-    return { r, c }
-  }
-
-  function getNeighbors(cell: { r: number, c: number }) {
-    const { rows, cols } = getGridShape()
-    const neighbors = []
-    if (cell.r > 0) neighbors.push({ r: cell.r - 1, c: cell.c })
-    if (cell.r < rows - 1) neighbors.push({ r: cell.r + 1, c: cell.c })
-    if (cell.c > 0) neighbors.push({ r: cell.r, c: cell.c - 1 })
-    if (cell.c < cols - 1) neighbors.push({ r: cell.r, c: cell.c + 1 })
-    return neighbors
-  }
-
-  function isWall(cell: { r: number, c: number }, grid: number[][]) {
-    return grid[cell.r][cell.c] === 0
-  }
-
-  function isPassage(cell: { r: number, c: number }, grid: number[][]) {
-    return grid[cell.r][cell.c] === 1
-  }
-
-  function isFreeWay(cell: { r: number, c: number }, grid: number[][]) {
-    const neighbors = getNeighbors(cell)
-    let passages = 0
-    for (const n of neighbors) {
-      if (isPassage(n, grid)) passages++
-    }
-    return passages === 1
-  }
-
-  function generateMaze() {
-    const { rows, cols } = getGridShape()
-    const grid = createGrid(rows, cols) // 0 = wall, 1 = passage
-
-    const start = randCell()
-    grid[start.r][start.c] = 1
-    const stack = [start]
-    while (stack.length > 0) {
-      const current = stack[stack.length - 1]
-
-      const neighbors = getNeighbors(current)
-        .filter(n => {return isWall(n, grid)})
-        .filter(n => {return isFreeWay(n, grid)})
-
-      if (neighbors.length === 0) {
-        stack.pop()
-        continue
-      }
-
-      const next = neighbors[randInt(0, neighbors.length - 1)]
-      grid[next.r][next.c] = 1
-      stack.push(next)
-    }
-    
-    clearGrid()
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        if (grid[r][c] === 0)  setCell(r, c, 'wall')
-      }
-    }
   }
 
   onMounted(() => {
@@ -154,7 +82,7 @@ import GridFooter from './GridFooter.vue'
       </div>
     </section>
 
-    <GridFooter  @clear="clearGrid" @generate="generateMaze"/>
+    <GridFooter  @clear="clearGrid" @generate="applyMaze"/>
   </main>
 </template>
 

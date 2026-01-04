@@ -36,7 +36,8 @@
 
   function applyMaze() {
     const maze = Maze.generate(ROWS, COLS)
-    grid.value = maze.map(r => r.map(c => (c === 1 ? 'wall' : 'empty')))
+    const stateMap = { 0: 'empty', 1: 'wall', 2: 'start', 3: 'end'}
+    grid.value = maze.map(r => r.map(c => stateMap[c]))
   }
 
   function toggleCell(i: number, j: number) {

@@ -1,4 +1,4 @@
-type MazeCell = 0 | 1; // 0 = passage, 1 = wall
+type MazeCell = 0 | 1 | 2 | 3; // 0 = passage, 1 = wall, 2 = start, 3 = end
 type Cell = { r: number; c: number };
 
 export class Maze {
@@ -39,11 +39,11 @@ export class Maze {
   }
 
   private isPassage(cell: Cell): boolean {
-    return this.grid[cell.r]![cell.c] === 0;
+    return this.grid[cell.r][cell.c] === 0;
   }
 
   private isWall(cell: Cell): boolean {
-    return this.grid[cell.r]![cell.c] === 1;
+    return this.grid[cell.r][cell.c] === 1;
   }
 
   private isFreeWay(cell: Cell): boolean {
@@ -54,7 +54,7 @@ export class Maze {
   }
 
   private setPasage(cell: Cell): void {
-    this.grid[cell.r]![cell.c] = 0;
+    this.grid[cell.r][cell.c] = 0;
   }
 
   generate(): MazeCell[][] {
@@ -77,6 +77,20 @@ export class Maze {
       this.setPasage(next);
       stack.push(next);
     }
+
+    let startCell: Cell;
+    do {
+      startCell = this.randCell();
+    } while (this.isWall(startCell));
+
+    let endCell: Cell;
+    do {
+      endCell = this.randCell();
+    } while (this.isWall(endCell));
+
+    this.grid[startCell.r][startCell.c] = 2;
+    this.grid[endCell.r][endCell.c] = 3;
+
     return this.grid;
   }
 

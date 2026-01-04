@@ -12,7 +12,7 @@ export function useMouse() {
     mouseDown.value = false;
   };
 
-  useEventListener(window, "mousedown", start);
+  useEventListener(window, "mouseup", stop);
 
   return {
     mouseDown,

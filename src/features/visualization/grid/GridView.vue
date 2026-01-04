@@ -2,8 +2,8 @@
   import { ref, computed } from 'vue'
   import GridFooter from './GridFooter.vue'
   
-  import { Maze } from '@/composables/useMaze'
-  import { useMouse } from '@/composables/useMouse'
+  import { Maze } from '@/composables/maze'
+  import { useMouse } from '@/composables/mouse'
 
   type CellState = 'empty' | 'start' | 'end' | 'wall'
 

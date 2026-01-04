@@ -1,11 +1,12 @@
 <script setup lang="ts">
-  const props = defineProps<{'title': string, id: string, 'options': string[]}>()
+  const modelValue = defineModel<string>()
+  const props = defineProps<{'title': string, 'options': string[]}>()
 </script>
 
 <template>
   <span>{{ title }}</span>
-  <select :id="props.id">
-    <option v-for="option in options" :value="option" :key="option">{{ option }}</option>
+  <select v-model="modelValue">
+    <option v-for="option in options" :key="option" :value="option">{{ option }}</option>
   </select>
 </template>
 

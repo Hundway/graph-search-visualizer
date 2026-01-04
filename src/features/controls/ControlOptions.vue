@@ -1,13 +1,32 @@
 <script setup lang="ts">
   import OptionItem from '@/components/OptionItem.vue';
+  import { useOptionsStore } from '@/stores/OptionStore';
+
+  const optionsStore = useOptionsStore()
 </script>
 
 <template>
   <div>
-    <OptionItem title="Problem Type" id="problem-type" :options="['8-Puzzle', 'Random Maze', 'Romania Map', 'Simple Grid']"/>
-    <OptionItem title="Search Algorithm" id="search-algorithm" :options="['Depth-First Search', 'Breadth-First Search', 'Iterative Deepening Search', 'Greedy Best-First Search', 'Uniform Cost Search', 'A*']"/>
-    <OptionItem title="Heuristic Distance" id="heristic" :options="['None', 'Manhattan', 'Euclidean', 'Chebyshev']"/>
-    <OptionItem title="Animation Speed" id="animation-speed" :options="['Slow', 'Normal', 'Fast', 'Instant']"/>
+    <OptionItem
+      v-model="optionsStore.problemType"
+      title="Problem Type"
+      :options="['Eight-Puzzle', 'Maze Grid', 'Romania Map']"
+    />
+    <OptionItem
+      v-model="optionsStore.searchAlgorithm"
+      title="Search Algorithm"
+      :options="['Depth-First Search', 'Breadth-First Search', 'Iterative Deepening Search', 'Greedy Best-First Search', 'Uniform Cost Search', 'A*']"
+      />
+    <OptionItem
+      v-model="optionsStore.heuristicDistance"
+      title="Heuristic Distance"
+      :options="['None', 'Manhattan', 'Euclidean', 'Chebyshev']"
+    />
+    <OptionItem
+      v-model="optionsStore.animationSpeed"
+      title="Animation Speed"
+      :options="['Slow', 'Normal', 'Fast', 'Instant']"
+    />
   </div>
 </template>
 

@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 
-export const useOptionsStore = defineStore("options", {
+export const useOptionsStore = defineStore("options-store", {
   state() {
     return {
-      problemType: "8-Puzzle",
+      problemType: "Maze Grid",
       searchAlgorithm: "Depth-First Search",
       heuristicDistance: "Manhattan",
       animationSpeed: "Normal",

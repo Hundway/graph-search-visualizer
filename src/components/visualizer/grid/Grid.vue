@@ -1,73 +1,62 @@
 <script setup lang="ts">
-  import { ref, computed, onMounted, onUnmounted } from 'vue'
+  import { ref, computed } from 'vue'
   import GridFooter from './GridFooter.vue'
-  import { Maze } from './useMaze.ts'
+  
+  import { Maze } from './useMaze'
+  import { useMouse } from '@/components/useMouse'
 
   type CellState = 'empty' | 'start' | 'end' | 'wall'
 
-  const ROWS = 20
-  const COLS = 30
-  const grid = ref<CellState[][]>(Array.from({ length: ROWS }, () => Array.from({ length: COLS }, () => 'empty')))
+  const ROWS = 35
+  const COLS = 50
 
-  const mouseDown = ref(false)
+  function createGrid(): CellState[][] {
+    return Array.from({ length: ROWS }, () =>
+      Array.from({ length: COLS }, () => 'empty')
+    )
+  }
 
-  const startIsSet = computed(() =>
-    grid.value.some(row => row.includes('start'))
-  )
+  const grid = ref(createGrid())
+  const { mouseDown, start: startMouse, stop: stopMouse } = useMouse()
 
-  const endIsSet = computed(() =>
-    grid.value.some(row => row.includes('end'))
-  )
+  const gridFlags = computed(() => {
+    let hasStart = false
+    let hasEnd = false
+    for (const row of grid.value) {
+      if (!hasStart && row.includes('start')) hasStart = true
+      if (!hasEnd && row.includes('end')) hasEnd = true
+      if (hasStart && hasEnd) break
+    }
+    return { hasStart, hasEnd }
+  })
 
   function clearGrid() {
-    for (let i = 0; i < ROWS; i++)
-      for (let j = 0; j < COLS; j++)
-        grid.value[i]![j] = 'empty'
+    grid.value = createGrid()
   }
 
   function applyMaze() {
-    clearGrid()
-    renderMaze(Maze.generate(ROWS, COLS))
-  }
-
-  function renderMaze(maze: number[][]) {
-    for (let r = 0; r < ROWS; r++) {
-      for (let c = 0; c < COLS; c++) {
-        if (maze[r]![c] === 1) {
-          grid.value[r]![c] = 'wall'
-        }
-      }
-    }
+    const maze = Maze.generate(ROWS, COLS)
+    grid.value = maze.map(r => r.map(c => (c === 1 ? 'wall' : 'empty')))
   }
 
   function toggleCell(i: number, j: number) {
-    const current = grid.value[i]![j]
-    let next: CellState = 'empty'
-    if (current === 'empty') {
-      next = !startIsSet.value ? 'start': !endIsSet.value ? 'end' : 'wall'
-    }
-    grid.value[i]![j] = next
+    if (grid.value[i]![j] !== 'empty') return
+    grid.value[i]![j] = !gridFlags.value.hasStart ? 'start': !gridFlags.value.hasEnd ? 'end' : 'wall'
   }
 
   function onEnter(i: number, j: number) {
     if (mouseDown.value) toggleCell(i, j)
   }
-
-  function stopMouse() {
-    mouseDown.value = false
-  }
-
-  onMounted(() => {
-    window.addEventListener('mouseup', stopMouse)
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('mouseup', stopMouse)
-  })
 </script>
 
+
 <template>
-  <main id="grid-editor" @mousedown="mouseDown = true" @mouseup="mouseDown = false" @mouseleave="mouseDown = false">
+  <main
+    id="grid-editor"
+    @mousedown="startMouse"
+    @mouseup="stopMouse"
+    @mouseleave="stopMouse"
+  > 
     <section id="grid">
       <div class="grid-row" v-for="(row, i) in grid" :key="i">
         <div
@@ -98,8 +87,8 @@
   }
 
   .grid-cell {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border: 1px solid var(--border);
     margin-right: -1px;
     margin-bottom: -1px;

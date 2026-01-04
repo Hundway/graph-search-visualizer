@@ -1,4 +1,5 @@
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref } from "vue";
+import { useEventListener } from "@/composables/Event";
 
 export function useMouse() {
   const mouseDown = ref(false);
@@ -11,13 +12,7 @@ export function useMouse() {
     mouseDown.value = false;
   };
 
-  onMounted(() => {
-    window.addEventListener("mouseup", stop);
-  });
-
-  onUnmounted(() => {
-    window.removeEventListener("mouseup", stop);
-  });
+  useEventListener(window, "mousedown", start);
 
   return {
     mouseDown,

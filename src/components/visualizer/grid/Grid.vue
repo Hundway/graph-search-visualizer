@@ -41,8 +41,12 @@
   }
 
   function toggleCell(i: number, j: number) {
-    if (grid.value[i]![j] !== 'empty') return
-    grid.value[i]![j] = !gridFlags.value.hasStart ? 'start': !gridFlags.value.hasEnd ? 'end' : 'wall'
+    if (grid.value[i]![j] === 'empty'){
+      grid.value[i]![j] = !gridFlags.value.hasStart ? 'start': !gridFlags.value.hasEnd ? 'end' : 'wall'
+    }
+    else{
+      grid.value[i]![j] = 'empty'
+    }
   }
 
   function onEnter(i: number, j: number) {

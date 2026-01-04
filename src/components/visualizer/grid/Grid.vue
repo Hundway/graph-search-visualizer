@@ -30,14 +30,25 @@
     return { hasStart, hasEnd }
   })
 
-  function clearGrid() {
-    grid.value = createGrid()
+  async function clearGrid() {
+    for (let i = 0; i < ROWS; i++) {
+      for (let j = 0; j < COLS; j++) {
+        grid.value[i]![j] = 'empty'
+      }
+      await new Promise(r => requestAnimationFrame(r))
+    }
   }
 
-  function applyMaze() {
+  async function applyMaze() {
     const maze = Maze.generate(ROWS, COLS)
-    const stateMap = { 0: 'empty', 1: 'wall', 2: 'start', 3: 'end'}
-    grid.value = maze.map(r => r.map(c => stateMap[c]))
+    const stateMap = { 0: 'empty', 1: 'wall', 2: 'start', 3: 'end' }
+
+    for (let i = 0; i < ROWS; i++) {
+      for (let j = 0; j < COLS; j++) {
+        grid.value[i]![j] = stateMap[maze[i][j]]
+      }
+      await new Promise(r => requestAnimationFrame(r))
+    }
   }
 
   function toggleCell(i: number, j: number) {

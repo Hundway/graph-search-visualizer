@@ -37,7 +37,7 @@
     align-items: center;
     border: none;
     width: 20px;
-    background-color: var(--border);
+    background-color: var(--bg-light);
     cursor: pointer;
   }
 

@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import Settings from './components/settings/Settings.vue'
-  import Visualizer from './components/visualizer/Visualizer.vue'
+  import SettingsView from './features/settings/SettingsView.vue';
+  import VisualizerView from './features/visualization/VisualizerView.vue';
 </script>
 
 
 <template>
   <div id="app-root">
     <main id="visualizer-area">
-      <Visualizer/>
+      <VisualizerView/>
     </main>
-    <Settings/>
+    <SettingsView/>
   </div>
 </template>
 

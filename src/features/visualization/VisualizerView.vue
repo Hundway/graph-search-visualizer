@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import Grid from './grid/Grid.vue';
+  import GridView from './grid/GridView.vue';
 </script>
 
 <template>
-  <Grid/>
+  <GridView/>
 </template>
 
 <style scoped>

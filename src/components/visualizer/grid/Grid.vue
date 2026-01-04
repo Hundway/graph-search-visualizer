@@ -7,8 +7,8 @@
 
   type CellState = 'empty' | 'start' | 'end' | 'wall'
 
-  const ROWS = 35
-  const COLS = 50
+  const ROWS = 25
+  const COLS = 40
 
   function createGrid(): CellState[][] {
     return Array.from({ length: ROWS }, () =>
@@ -87,8 +87,8 @@
   }
 
   .grid-cell {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     border: 1px solid var(--border);
     margin-right: -1px;
     margin-bottom: -1px;

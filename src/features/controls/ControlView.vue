@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
-  import SettingsPanel from './SettingsPanel.vue'
+  import ControlPanel from './ControlPanel.vue'
   
   const isPanelOpen = ref(true)
   
@@ -19,7 +19,7 @@
     <button id="settings-toggle-button" @pointerdown="toggleConfiguration">
       <img :src="toggleIconUrl"/>
     </button>
-    <SettingsPanel v-show="isPanelOpen"/>
+    <ControlPanel v-show="isPanelOpen"/>
   </aside>
 </template>
 

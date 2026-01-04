@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import ButtonIcon from '@/components/ui/ButtonIcon.vue';
-  import ButtonIconList from '@/components/ui/ButtonIconList.vue';
+  import ButtonIcon from '@/components/ButtonIcon.vue';
+  import ButtonIconList from '@/components/ButtonIconList.vue';
   import GridLegend from './GridLegend.vue';
 
   const emit = defineEmits(['clear', 'generate'])

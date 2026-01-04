@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SettingsView from './features/settings/SettingsView.vue';
+  import ControlView from './features/controls/ControlView.vue';
   import VisualizerView from './features/visualization/VisualizerView.vue';
 </script>
 
@@ -9,7 +9,7 @@
     <main id="visualizer-area">
       <VisualizerView/>
     </main>
-    <SettingsView/>
+    <ControlView/>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { ref, onBeforeUnmount } from 'vue'
-  import SettingsOptions from './SettingsOptions.vue'
+  import ControlOptions from './ControlOptions.vue'
   import ButtonIconList from '@/components/ButtonIconList.vue'
   import ButtonIcon from '@/components/ButtonIcon.vue'
 
@@ -32,7 +32,7 @@
     <button id="panel-resizer" @pointerdown="startResize"/>
     <section>
       <h2>Configuration Panel</h2>
-      <SettingsOptions />
+      <ControlOptions />
       <ButtonIconList>
         <ButtonIcon id="bt-start" iconUrl="/src/assets/icons/start.svg" title="Start"/>
         <ButtonIcon id="bt-reset" iconUrl="/src/assets/icons/reset.svg" title="Reset"/>

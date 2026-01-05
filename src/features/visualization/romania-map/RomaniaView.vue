@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed } from 'vue';
 
-  import Node from './Node.vue';
-  import Road from './Road.vue';
+  import Node from '@/components/Node.vue';
+  import Road from '@/components/Road.vue';
 
   import cities from './romania-cities-coordinates.json' with { type: 'json' };
   import connections from './romania-cities-roads.json' with { type: 'json' };

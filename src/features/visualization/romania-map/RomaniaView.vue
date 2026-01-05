@@ -4,8 +4,8 @@
   import Node from '@/components/Node.vue';
   import Road from '@/components/Road.vue';
 
-  import cities from './romania-cities-coordinates.json' with { type: 'json' };
-  import connections from './romania-cities-roads.json' with { type: 'json' };
+  import cities from '@/assets/romania-cities-coordinates.json' with { type: 'json' };
+  import connections from '@/assets/romania-roads.json' with { type: 'json' };
 
   import RomaniaHeader from './RomaniaHeader.vue';
   import RomaniaFooter from './RomaniaFooter.vue';

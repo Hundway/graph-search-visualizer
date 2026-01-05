@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import ControlView from './features/controls/ControlView.vue';
-  import VisualizerView from './features/visualization/VisualizerView.vue';
+  import VisualizerView from './features/visualizer/VisualizerView.vue';
 </script>
 
 

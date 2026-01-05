@@ -1,10 +1,13 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
-  import GridFooter from './GridFooter.vue'
-  
+
   import { Maze } from '@/composables/maze'
   import { useMouse } from '@/composables/mouse'
+  import Header from "@/components/Header.vue"
 
+  import GridFooter from './GridFooter.vue'
+
+  
   type CellState = 'empty' | 'start' | 'end' | 'wall'
 
   const ROWS = 25
@@ -68,12 +71,13 @@
 
 <template>
   <main
-    id="grid-editor"
+    id="grid-view"
     @mousedown="startMouse"
     @mouseup="stopMouse"
     @mouseleave="stopMouse"
   > 
-    <section id="grid">
+    <Header title="Maze Grid"/>
+    <section>
       <div class="grid-row" v-for="(row, i) in grid" :key="i">
         <div
           class="grid-cell"
@@ -86,16 +90,19 @@
         />
       </div>
     </section>
-
     <GridFooter  @clear="clearGrid" @generate="applyMaze"/>
   </main>
 </template>
 
 <style scoped>
-  #grid-editor {
+  #grid-view {
     display: flex;
     flex-direction: column;
     gap: 20px;
+  }
+
+  #grid-header {
+    color: var(--text);
   }
 
   .grid-row {

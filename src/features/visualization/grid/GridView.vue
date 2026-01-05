@@ -1,13 +1,10 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
-
   import { Maze } from '@/composables/maze'
   import { useMouse } from '@/composables/mouse'
   import Header from "@/components/Header.vue"
-
   import GridFooter from './GridFooter.vue'
 
-  
   type CellState = 'empty' | 'start' | 'end' | 'wall'
 
   const ROWS = 25
@@ -77,7 +74,7 @@
     @mouseleave="stopMouse"
   > 
     <Header title="Maze Grid"/>
-    <section>
+    <section id="grid-container">
       <div class="grid-row" v-for="(row, i) in grid" :key="i">
         <div
           class="grid-cell"
@@ -103,6 +100,14 @@
 
   #grid-header {
     color: var(--text);
+  }
+
+  #grid-container {
+    border-style: solid;
+    border-color: var(--border);
+    border-width:  1px 2px 2px 1px;
+    border-radius: 8px;
+    overflow: hidden;
   }
 
   .grid-row {

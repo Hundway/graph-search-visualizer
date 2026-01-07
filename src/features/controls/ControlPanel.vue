@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { ref, onBeforeUnmount } from 'vue'
+  import { ref } from 'vue'
   import ControlOptions from './ControlOptions.vue'
-  import ButtonGrouop from '@/components/ButtonGrouop.vue'
+  import ButtonGrouop from '@/components/ButtonGroup.vue'
   import Button from '@/components/Button.vue'
 
   const panelWidth = ref(400)
@@ -23,8 +23,6 @@
     window.addEventListener('pointermove', onPointerMove)
     window.addEventListener('pointerup', stopResize)
   }
-
-  onBeforeUnmount(stopResize)
 </script>
 
 <template>

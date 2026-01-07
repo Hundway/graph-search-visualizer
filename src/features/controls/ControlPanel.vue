@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { ref, onBeforeUnmount } from 'vue'
   import ControlOptions from './ControlOptions.vue'
-  import ButtonIconList from '@/components/ButtonIconList.vue'
-  import ButtonIcon from '@/components/ButtonIcon.vue'
+  import ButtonGrouop from '@/components/ButtonGrouop.vue'
+  import Button from '@/components/Button.vue'
 
   const panelWidth = ref(400)
   let resizing = false
@@ -33,10 +33,10 @@
     <section>
       <h2>Configuration Panel</h2>
       <ControlOptions />
-      <ButtonIconList>
-        <ButtonIcon id="bt-start" iconUrl="/src/assets/icons/start.svg" title="Start"/>
-        <ButtonIcon id="bt-reset" iconUrl="/src/assets/icons/reset.svg" title="Reset"/>
-      </ButtonIconList>
+      <ButtonGrouop>
+        <Button id="bt-start" iconUrl="/src/assets/icons/start.svg" title="Start"/>
+        <Button id="bt-reset" iconUrl="/src/assets/icons/reset.svg" title="Reset"/>
+      </ButtonGrouop>
     </section>
   </div>
 </template>

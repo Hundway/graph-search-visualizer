@@ -17,7 +17,7 @@
   }
 
   const grid = ref(createGrid())
-  const { mouseDown, start: startMouse, stop: stopMouse } = useMouse()
+  const { isMouseDown, onMouseDown, onMouseUp } = useMouse()
 
   const gridFlags = computed(() => {
     let hasStart = false
@@ -61,7 +61,7 @@
   }
 
   function onEnter(i: number, j: number) {
-    if (mouseDown.value) toggleCell(i, j)
+    if (isMouseDown.value) toggleCell(i, j)
   }
 </script>
 
@@ -69,9 +69,9 @@
 <template>
   <main
     id="grid-view"
-    @mousedown="startMouse"
-    @mouseup="stopMouse"
-    @mouseleave="stopMouse"
+    @mousedown="onMouseDown"
+    @mouseup="onMouseUp"
+    @mouseleave="onMouseUp"
   > 
     <Header title="Maze Grid"/>
     <section id="grid-container">

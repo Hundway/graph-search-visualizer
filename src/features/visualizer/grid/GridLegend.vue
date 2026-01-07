@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import LegendItem from '@/components/LegendItem.vue';
+  import Legend from '@/components/Legend.vue';
 </script>
 
 <template>
   <ul id="grid-legend">
-    <LegendItem title="start" box-class="start"/>
-    <LegendItem title="end"   box-class="end"/>
-    <LegendItem title="wall"  box-class="wall"/>
+    <Legend title="start" box-class="start"/>
+    <Legend title="end"   box-class="end"/>
+    <Legend title="wall"  box-class="wall"/>
   </ul>
 </template>
 

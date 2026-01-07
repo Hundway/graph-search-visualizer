@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import LegendItem from '@/components/LegendItem.vue';
+  import Legend from '@/components/Legend.vue';
 </script>
 
 <template>
   <div>
     <ul id="romania-legend">
-      <LegendItem title="start" box-class="start"/>
-      <LegendItem title="end"   box-class="end"/>
+      <Legend title="start" box-class="start"/>
+      <Legend title="end"   box-class="end"/>
     </ul>
   </div>
 </template>

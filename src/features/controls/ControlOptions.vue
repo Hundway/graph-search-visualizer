@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import OptionItem from '@/components/OptionItem.vue';
+  import Select from '@/components/Select.vue';
   import { useOptionsStore } from '@/stores/OptionStore';
 
   const optionsStore = useOptionsStore()
@@ -7,22 +7,22 @@
 
 <template>
   <div>
-    <OptionItem
+    <Select
       v-model="optionsStore.problemType"
       title="Problem Type"
       :options="['Eight-Puzzle', 'Maze Grid', 'Romania Map']"
     />
-    <OptionItem
+    <Select
       v-model="optionsStore.searchAlgorithm"
       title="Search Algorithm"
       :options="['Depth-First Search', 'Breadth-First Search', 'Iterative Deepening Search', 'Greedy Best-First Search', 'Uniform Cost Search', 'A*']"
       />
-    <OptionItem
+    <Select
       v-model="optionsStore.heuristicDistance"
       title="Heuristic Distance"
       :options="['None', 'Manhattan', 'Euclidean', 'Chebyshev']"
     />
-    <OptionItem
+    <Select
       v-model="optionsStore.animationSpeed"
       title="Animation Speed"
       :options="['Slow', 'Normal', 'Fast', 'Instant']"

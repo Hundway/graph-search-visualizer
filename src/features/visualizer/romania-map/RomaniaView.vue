@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { ref, computed, onMounted } from 'vue';
-  import * as d3 from 'd3-force';
-  import Node from '@/components/Node.vue';
+  import { ref, computed, onMounted, onUnmounted } from 'vue';
+  import { forceX, forceY, forceSimulation, forceManyBody } from 'd3-force';
+  import { useDrag } from '@/composables/mouse';
+  import City from '@/components/City.vue';
   import Road from '@/components/Road.vue';
   import Header from '@/components/Header.vue';
   import RomaniaFooter from './RomaniaFooter.vue';
@@ -11,131 +12,93 @@
   const VIEWBOX_W = 1600; 
   const VIEWBOX_H = 1100; 
   const PADDING = 100;
-  const NODE_SIZE = 110;
+  const CITY_SIZE = 110;
 
-  const cities = ref(citiesCoordinates.map(city => ({ ...city, state: 'empty' })));
-  const nodes = ref<any[]>([]);
+  const mapSvg = ref<SVGSVGElement | null>(null);
+  const cities = ref<any[]>([]);
+  const simulation = ref<any>(null);
+  
+  const { onDragStart, onDragMove, onDragEnd } = useDrag();
 
-  const isDragging = ref(false);
-  const draggedNodeTitle = ref<string | null>(null);
-  let simulation: d3.Simulation<any, undefined>;
+  const handleCityDrag = (event: MouseEvent) => {
+    onDragMove(event, (city, clientX, clientY) => {
+      const map = mapSvg.value;
+      if (!map) return;
+
+      const pt = map.createSVGPoint();
+      pt.x = clientX;
+      pt.y = clientY;
+
+      const weight = 1;
+      const svgPoint = pt.matrixTransform(map.getScreenCTM()?.inverse());
+      const { x, y } = svgPoint;
+
+      city.fx = city.x + (x - city.x) * weight;
+      city.fy = city.y + (y - city.y) * weight;
+      simulation.value?.alpha(0.1).restart();
+    });
+  };
+
+  const stopCityDrag = () => {
+    onDragEnd((city) => {
+      city.fx = null;
+      city.fy = null;
+      simulation.value?.alpha(0.5).restart();
+    });
+  };
 
   const anchoredCities = computed(() => {
-    const xValues = cities.value.map(c => c.x);
-    const yValues = cities.value.map(c => c.y);
-    const minX = Math.min(...xValues);
-    const maxX = Math.max(...xValues);
-    const minY = Math.min(...yValues);
-    const maxY = Math.max(...yValues);
-    return cities.value.map(city => ({
+    const xValues = citiesCoordinates.map(c => c.x);
+    const yValues = citiesCoordinates.map(c => c.y);
+    const minX = Math.min(...xValues), maxX = Math.max(...xValues);
+    const minY = Math.min(...yValues), maxY = Math.max(...yValues);
+    
+    return citiesCoordinates.map(city => ({
       ...city,
+      state: 'empty',
       targetX: ((city.x - minX) / (maxX - minX)) * (VIEWBOX_W - 2 * PADDING) + PADDING,
       targetY: ((city.y - minY) / (maxY - minY)) * (VIEWBOX_H - 2 * PADDING) + PADDING
     }));
   });
 
-  const paths = computed(() => {
-    return connections.map(conn => {
-      const startNode = nodes.value.find(n => n.title === conn.source);
-      const endNode = nodes.value.find(n => n.title === conn.destination);
-      return {
-        x1: startNode?.x ?? 0,
-        y1: startNode?.y ?? 0,
-        x2: endNode?.x ?? 0,
-        y2: endNode?.y ?? 0
-      };
-    });
-  });
+  const paths = computed(() => connections.map(connection => {
+    const s = cities.value.find(city => city.title === connection.source);
+    const d = cities.value.find(city => city.title === connection.destination);
+    return { x1: s?.x ?? 0, y1: s?.y ?? 0, x2: d?.x ?? 0, y2: d?.y ?? 0 };
+  }));
 
-  function toggleCityState(title: string) {
-    const node = nodes.value.find(n => n.title === title);
-    if (!node) return;
-
-    if (node.state === 'start' || node.state === 'end') {
-      node.state = 'empty';
-    }
+  function toggleCityState(city: any) {
+    if (city.state !== 'empty') city.state = 'empty';
     else {
-      const hasStart = nodes.value.some(n => n.state === 'start');
-      const hasEnd = nodes.value.some(n => n.state === 'end');
-      if (!hasStart) node.state = 'start';
-      else if (!hasEnd) node.state = 'end';
+      const hasStart = cities.value.some(n => n.state === 'start');
+      const hasEnd = cities.value.some(n => n.state === 'end')
+      city.state = !hasStart ? 'start' : (!hasEnd ? 'end' : 'empty');
     }
   }
 
   onMounted(() => {
-    nodes.value = anchoredCities.value.map(c => ({ 
-      ...c, 
-      x: c.targetX, 
-      y: c.targetY 
-    }));
-    simulation = d3.forceSimulation(nodes.value)
-      .force("charge", d3.forceManyBody().strength(-200))
-      .force("x", d3.forceX((d: any) => d.targetX).strength(0.15))
-      .force("y", d3.forceY((d: any) => d.targetY).strength(0.15))
-      .on("tick", () => {
-        nodes.value = [...nodes.value]; 
-      });
+    cities.value = anchoredCities.value.map(c => ({ ...c, x: c.targetX, y: c.targetY }));
+    simulation.value = forceSimulation(cities.value)
+      .force("charge", forceManyBody().strength(-150))
+      .force("x", forceX((d: any) => d.targetX).strength(0.1))
+      .force("y", forceY((d: any) => d.targetY).strength(0.1))
+      .on("tick", () => cities.value = [...cities.value]);
   });
-
-  function handleDrag(event: MouseEvent) {
-    if (!isDragging.value || !draggedNodeTitle.value) return;
-    
-    const node = nodes.value.find(n => n.title === draggedNodeTitle.value);
-    if (node) {
-      const svg = document.getElementById('map-svg') as any;
-
-      const pt = svg.createSVGPoint();
-      pt.x = event.clientX;
-      pt.y = event.clientY;
-
-      const cursor = pt.matrixTransform(svg.getScreenCTM().inverse());
-      node.fx = cursor.x;
-      node.fy = cursor.y;
-      
-      simulation.alpha(0.1).restart();
-    }
-  }
-
-  function startDragging(title: string) {
-    isDragging.value = true;
-    draggedNodeTitle.value = title;
-  }
-
-  function stopDragging() {
-    isDragging.value = false;
-    draggedNodeTitle.value = null;
-    nodes.value.forEach(n => {
-      n.fx = null;
-      n.fy = null;
-    });
-    simulation.alpha(0.9).restart();
-  }
 </script>
 
 <template>
-  <main 
-    id="romania-view" 
-    @mousemove="handleDrag" 
-    @mouseup="stopDragging" 
-    @mouseleave="stopDragging"
-  >
+  <main id="romania-view" @mousemove="handleCityDrag" @mouseup="stopCityDrag" @mouseleave="stopCityDrag">
     <Header title="Romania Map" />
-    <section>
-      <div id="romania-map-container">
-        <svg id="map-svg" :viewBox="`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`">
-          <Road v-for="(path, i) in paths" :key="i" v-bind="path" />
-          
-          <Node 
-            v-for="node in nodes"
-            :key="node.title"
-            v-bind="node"
-            :size="NODE_SIZE"
-            @mousedown="startDragging(node.title)"
-            @click="toggleCityState(node.title)"
-          />
-        </svg>
-      </div>
-    </section>
+    <div id="romania-map-container">
+      <svg ref="mapSvg" id="map-svg" :viewBox="`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`">
+        <Road v-for="(path, i) in paths" :key="i" v-bind="path" />
+        <City 
+          v-for="city in cities" :key="city.title" v-bind="city" :size="CITY_SIZE"
+          @mousedown="onDragStart(city)"
+          @click="toggleCityState(city)"
+        />
+      </svg>
+    </div>
     <RomaniaFooter/>
   </main>
 </template>

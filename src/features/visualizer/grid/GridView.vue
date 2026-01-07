@@ -52,11 +52,13 @@
   }
 
   function toggleCell(i: number, j: number) {
-    if (grid.value[i]![j] === 'empty'){
-      grid.value[i]![j] = !gridFlags.value.hasStart ? 'start': !gridFlags.value.hasEnd ? 'end' : 'wall'
+    if (grid.value[i]![j] !== 'empty'){
+      grid.value[i]![j] = 'empty'
     }
     else{
-      grid.value[i]![j] = 'empty'
+      const hasStart = gridFlags.value.hasStart
+      const hasEnd = gridFlags.value.hasEnd
+      grid.value[i]![j] = !hasStart ? 'start': !hasEnd ? 'end' : 'wall'
     }
   }
 

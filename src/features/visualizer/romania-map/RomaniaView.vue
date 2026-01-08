@@ -14,9 +14,9 @@
   const PADDING = 100;
   const CITY_SIZE = 110;
 
-  const mapSvg = ref<SVGSVGElement | null>(null);
   const cities = ref<any[]>([]);
-  const simulation = ref<any>(null);
+  const mapSvg = ref<SVGSVGElement | null>(null);
+  const simulation = ref<Simulation<any, any> | null>(null);
   
   const { onDragStart, onDragMove, onDragEnd } = useDrag();
 
@@ -56,8 +56,8 @@
     return citiesCoordinates.map(city => ({
       ...city,
       state: 'empty',
-      targetX: ((city.x - minX) / (maxX - minX)) * (VIEWBOX_W - 2 * PADDING) + PADDING,
-      targetY: ((city.y - minY) / (maxY - minY)) * (VIEWBOX_H - 2 * PADDING) + PADDING
+      x: ((city.x - minX) / (maxX - minX)) * (VIEWBOX_W - 2 * PADDING) + PADDING,
+      y: ((city.y - minY) / (maxY - minY)) * (VIEWBOX_H - 2 * PADDING) + PADDING
     }));
   });
 
@@ -72,29 +72,33 @@
     else {
       const hasStart = cities.value.some(n => n.state === 'start');
       const hasEnd = cities.value.some(n => n.state === 'end')
-      city.state = !hasStart ? 'start' : (!hasEnd ? 'end' : 'empty');
+      city.state = !hasStart ? 'start' : !hasEnd ? 'end' : 'empty';
     }
   }
 
   onMounted(() => {
-    cities.value = anchoredCities.value.map(c => ({ ...c, x: c.targetX, y: c.targetY }));
+    cities.value = anchoredCities.value.map(c => ({ ...c, x: c.x, y: c.y }));
     simulation.value = forceSimulation(cities.value)
       .force("charge", forceManyBody().strength(-150))
-      .force("x", forceX((d: any) => d.targetX).strength(0.1))
-      .force("y", forceY((d: any) => d.targetY).strength(0.1))
+      .force("x", forceX((d: any) => d.x).strength(0.1))
+      .force("y", forceY((d: any) => d.y).strength(0.1))
       .on("tick", () => cities.value = [...cities.value]);
   });
 </script>
 
 <template>
-  <main id="romania-view" @mousemove="handleCityDrag" @mouseup="stopCityDrag" @mouseleave="stopCityDrag">
+  <main id="romania-view">
     <Header title="Romania Map" />
-    <div id="romania-map-container">
+    <div id="romania-map-container"
+      @mousemove="handleCityDrag"
+      @mouseup="stopCityDrag"
+      @mouseleave="stopCityDrag"
+    >
       <svg ref="mapSvg" id="map-svg" :viewBox="`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`">
         <Road v-for="(path, i) in paths" :key="i" v-bind="path" />
         <City 
           v-for="city in cities" :key="city.title" v-bind="city" :size="CITY_SIZE"
-          @mousedown="onDragStart(city)"
+          @mousedown.prevent="onDragStart(city)"
           @click="toggleCityState(city)"
         />
       </svg>

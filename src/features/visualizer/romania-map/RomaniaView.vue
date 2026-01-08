@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { ref, computed, onMounted, onUnmounted } from 'vue';
-  import { forceX, forceY, forceSimulation, forceManyBody } from 'd3-force';
+  import { forceX, forceY, forceSimulation, forceManyBody, type Simulation } from 'd3-force';
   import { useDrag } from '@/composables/mouse';
   import City from '@/components/City.vue';
   import Road from '@/components/Road.vue';
